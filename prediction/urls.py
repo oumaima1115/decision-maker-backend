@@ -1,6 +1,6 @@
 from django.urls import path
-from . import views
+from .views import receive_form_data
 
 urlpatterns = [
-    path('', views.index, name='index'), 
+    path('receiveFormData/', receive_form_data, name='receive_form_data'),
 ]
