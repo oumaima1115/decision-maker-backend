@@ -18,7 +18,5 @@ def train_linear_regression(features, target):
 def make_prediction(model, new_data):
     feature_names = model.named_steps['preprocessor'].transformers_[1][1].get_feature_names_out()
     prediction = model.predict(new_data)
-    print("**********")
-    print(feature_names)
-    print("**********")
+    #print(feature_names)
     return prediction
