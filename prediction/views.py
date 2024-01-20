@@ -21,17 +21,19 @@ def receive_form_data(request):
                     destination.write(chunk)
 
             df = pd.read_csv(csv_file_path, sep=';')
-            
+
             if target_variable not in df.columns:
                 return JsonResponse({'status': 'error', 'message': f'Target variable "{target_variable}" not found in the dataset'})
 
-            predictions, residuals, download_links, scatter_plot_base64 = perform_prediction_and_visualization(csv_file_path, target_variable)
-            print(download_links)
+            results = perform_prediction_and_visualization(csv_file_path, target_variable)
+            print(results)
 
             return JsonResponse({
                 'status': 'success',
                 'message': 'Form data received successfully',
-                'scatter_plot_base64': scatter_plot_base64,
+                'predictions': results['predictions'],
+                'residuals': results['residuals'],
+                'download_links': results['download_links'],
             })
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
