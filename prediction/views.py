@@ -46,7 +46,6 @@ def receive_form_data(request):
                 'status': 'success',
                 'message': 'Form data received successfully',
                 'predictions': predictions,
-                'residuals': residuals,
                 'download_links': download_links,
                 'image_urls': image_urls,
             })
