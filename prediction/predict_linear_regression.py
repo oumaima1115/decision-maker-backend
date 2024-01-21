@@ -10,6 +10,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.linear_model import LinearRegression
+from django.conf import settings
+
 
 def perform_prediction_and_visualization(csv_file_path, target_variable):
     df = pd.read_csv(csv_file_path, sep=';')
@@ -36,9 +38,9 @@ def perform_prediction_and_visualization(csv_file_path, target_variable):
     print(f'Predictions on the test set: {predictions}')
 
     # Data Visualization
-    folder_name = 'dataVisualization'
-    if not os.path.exists(folder_name):
-        os.makedirs(folder_name)
+    residuals = y_test_numeric - predictions
+    residuals_list = residuals.tolist()
+    folder_name = os.path.join(settings.STATIC_ROOT, 'images')
 
     scatter_plot_path = os.path.join(folder_name, 'scatter_plot.png')
     residual_plot_path = os.path.join(folder_name, 'residual_plot.png')
@@ -77,22 +79,28 @@ def perform_prediction_and_visualization(csv_file_path, target_variable):
 
     # Distribution plot for predictions
     plt.figure(figsize=(10, 6))
-    sns.kdeplot(predictions, label=f'Predicted {target_variable}', shade=True)
+    sns.kdeplot(predictions, label=f'Predicted {target_variable}', fill=True)
     plt.title(f'Distribution Plot of Predicted {target_variable}')
     plt.xlabel(f'{target_variable}')
     plt.legend()
     plt.savefig(distribution_predicted_path)
     plt.close()
 
+    # Update the image URLs to reflect the new folder structure
+    scatter_plot_url = os.path.join(settings.STATIC_URL, 'images', 'scatter_plot.png')
+    residual_plot_url = os.path.join(settings.STATIC_URL, 'images', 'residual_plot.png')
+    distribution_actual_url = os.path.join(settings.STATIC_URL, 'images', 'distribution_actual.png')
+    distribution_predicted_url = os.path.join(settings.STATIC_URL, 'images', 'distribution_predicted.png')
+
     download_links = {
-        'Scatter Plot': scatter_plot_path,
-        'Residual Plot': residual_plot_path,
-        'Distribution of Actual MPG': distribution_actual_path,
-        'Distribution Plot of Predicted MPG': distribution_predicted_path
+        'Scatter Plot': scatter_plot_url,
+        'Residual Plot': residual_plot_url,
+        'Distribution of Actual MPG': distribution_actual_url,
+        'Distribution Plot of Predicted MPG': distribution_predicted_url
     }
 
     return {
-        'predictions': predictions,
+        'predictions': predictions.tolist(),
         'residuals': residuals_list,
         'download_links': download_links,
     }
