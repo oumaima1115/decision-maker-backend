@@ -40,7 +40,7 @@ def perform_prediction_and_visualization(csv_file_path, target_variable):
     # Data Visualization
     residuals = y_test_numeric - predictions
     residuals_list = residuals.tolist()
-    folder_name = os.path.join(settings.STATIC_ROOT, 'images')
+    folder_name = os.path.join(settings.STATIC, 'images')
 
     scatter_plot_path = os.path.join(folder_name, 'scatter_plot.png')
     residual_plot_path = os.path.join(folder_name, 'residual_plot.png')

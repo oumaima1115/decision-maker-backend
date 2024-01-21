@@ -4,6 +4,7 @@ import pandas as pd
 import os
 from .predict_linear_regression import perform_prediction_and_visualization
 from django.conf import settings
+import json
 
 @csrf_exempt
 def receive_form_data(request):
@@ -32,7 +33,7 @@ def receive_form_data(request):
             residuals = results.get('residuals', [])
             download_links = results.get('download_links', {})
 
-            images_folder = os.path.join(settings.STATIC_ROOT, 'images')
+            images_folder = os.path.join(settings.STATIC, 'images')
 
             image_urls = []
             for filename in os.listdir(images_folder):
@@ -40,7 +41,7 @@ def receive_form_data(request):
                 if os.path.isfile(file_path) and filename.endswith(".png"):
                     image_url = f"{settings.STATIC_URL}images/{filename}"
                     image_urls.append(image_url)
-
+            print(image_urls)
             return JsonResponse({
                 'status': 'success',
                 'message': 'Form data received successfully',
@@ -52,5 +53,6 @@ def receive_form_data(request):
 
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
+
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
