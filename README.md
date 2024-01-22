@@ -32,6 +32,4 @@ If you wish to test the APIs using Postman, follow the instructions below:
 
 # Frontend link
 
-```python
-https://github.com/oumaima1115/Decision-maker
-```
+[Frontend Project](https://github.com/oumaima1115/Decision-maker)
